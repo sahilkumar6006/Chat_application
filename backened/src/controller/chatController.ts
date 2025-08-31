@@ -5,6 +5,7 @@ import { Request, Response } from "express";
 const accessChat = async(req: Request, res: Response) => {
     try {
         const { userId } = req.body;
+        console.log('Access chat request body:', req.body);
         if (!userId) {
             return res.status(400).json({ message: "User ID is required" });
         }
@@ -19,6 +20,7 @@ const accessChat = async(req: Request, res: Response) => {
         .populate("users", "-password")
         .populate("latestMessage");
 
+        console.log('Existing chat found:', isChat);
         const fullChat = await User.populate(isChat, {
             path: "latestMessage",
             populate: {
