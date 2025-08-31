@@ -55,7 +55,10 @@ export const initializeSockets = (io: Server<DefaultEventsMap, DefaultEventsMap,
       socket.to(room).emit('stop typing', room);
     });
 
+    // Debug: Log when 'new message' event is received
     socket.on('new message', (newMessage: Message, callback) => {
+      console.log('=== New Message Event Triggered ===');
+      console.log('Raw message:', JSON.stringify(newMessage, null, 2));
       try {
         console.log('=== New Message Received ===');
         
@@ -100,9 +103,11 @@ export const initializeSockets = (io: Server<DefaultEventsMap, DefaultEventsMap,
         }
 
         // Broadcast to all users in the chat except sender
+        console.log('Chat users:', JSON.stringify(chat.users, null, 2));
         const recipients = chat.users.filter((user: User) => user._id !== senderId);
         
         console.log(`Broadcasting to ${recipients.length} recipients`);
+        console.log('Recipient IDs:', recipients.map(r => r._id));
         
         // Prepare the message to send
         const messageToSend = {
@@ -126,8 +131,18 @@ export const initializeSockets = (io: Server<DefaultEventsMap, DefaultEventsMap,
         // Send to each recipient
         recipients.forEach((recipient: User) => {
           const roomId = recipient._id;
-          console.log(`Sending to user ${recipient.name || recipient._id} in room ${roomId}`);
+          console.log(`Attempting to send to room ${roomId} (${recipient.name || 'no name'})`);
+          console.log('Available rooms:', Array.from(socket.rooms));
+          
+          // Debug: Check if recipient is connected
+          const recipientSockets = io.sockets.sockets;
+          const isRecipientConnected = Array.from(recipientSockets).some(
+            ([_, sock]) => Array.from(sock.rooms).includes(roomId)
+          );
+          console.log(`Is recipient ${roomId} connected?`, isRecipientConnected);
+          
           socket.to(roomId).emit('message received', messageToSend);
+          console.log(`Message sent to room ${roomId}`);
         });
 
         // Send success response
