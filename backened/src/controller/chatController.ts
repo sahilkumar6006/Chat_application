@@ -76,10 +76,11 @@ const fetchChats = async (req: Request, res: Response) => {
 
 const createGroupChat = async( req: Request, res: Response) => {
     try {
+        console.log(req.body);
         if (!req.body.users || !req.body.name) {
             return res.status(400).send({ message: "Please Fill all the feilds" });
           }
-          const users = JSON.parse(req.body.users);
+          const users = req.body.users;
 
           if (users.length < 2) {
             return res

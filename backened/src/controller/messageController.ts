@@ -1,11 +1,6 @@
 import Chat from "../models/chatModel";
 import Message from "../models/messageModel";
-import User from "../models/userModel";
 import { Request, Response } from "express";
-import { Types } from "mongoose";
-
-
-
 
 const allMessages = async (req: Request, res: Response) => {
     try {
