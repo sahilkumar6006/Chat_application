@@ -11,67 +11,72 @@ import ButtonComp from '@/components/ButtonComp';
 import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import useRTLStyles from './styles';
+import { useNavigation } from '@react-navigation/native';
+import Routes from '../../navigation/Routes';
 // import actions from '@/redux/actions'; // TODO: Implement actions
 // import { useDispatch } from '@/redux/hooks';
 
 const Login = () => {
-    const { theme, toggleTheme } = useTheme();
-    const isRTL = useIsRTL();
-    const styles = useRTLStyles(isRTL, theme);
-    // const dispatch = useDispatch();
+  const { theme, toggleTheme } = useTheme();
+  const isRTL = useIsRTL();
+  const styles = useRTLStyles(isRTL, theme);
+  const Navigation = useNavigation<any>();
+  // const dispatch = useDispatch();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-    const handleLogin = async () => {
-        setLoading(true);
-        try {
-            // await dispatch(actions.login({ email, password }));
-            console.log('Login attempt:', email, password);
-            setTimeout(() => setLoading(false), 1000); // Simulate API call
-        } catch (error) {
-            console.error(error);
-            setLoading(false);
-        }
-    };
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      // await dispatch(actions.login({ email, password }));
+      console.log('Login attempt:', email, password);
 
-    return (
-        <WrapperContainer style={styles.container}>
-            <HeaderComp title="LOGIN" showBack={false} />
+      setTimeout(() => setLoading(false), 1000); // Simulate API call
+      Navigation.navigate(Routes.SERVICE_HOME);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
 
-            <View style={styles.content}>
-                <TextComp text="WELCOME_BACK" style={styles.title} />
+  return (
+    <WrapperContainer style={styles.container}>
+      <HeaderComp title="LOGIN" showBack={false} />
 
-                <TextInputComp
-                    label="EMAIL"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                />
+      <View style={styles.content}>
+        <TextComp text="WELCOME_BACK" style={styles.title} />
 
-                <TextInputComp
-                    label="PASSWORD"
-                    value={password}
-                    onChangeText={setPassword}
-                    isPassword
-                />
+        <TextInputComp
+          label="EMAIL"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
 
-                <ButtonComp
-                    text="LOGIN"
-                    onPress={handleLogin}
-                    isLoading={loading}
-                    style={{ marginBottom: 16 }}
-                />
+        <TextInputComp
+          label="PASSWORD"
+          value={password}
+          onChangeText={setPassword}
+          isPassword
+        />
 
-                <ButtonComp
-                    text="Toggle Theme"
-                    onPress={toggleTheme}
-                    variant="outline"
-                />
-            </View>
-        </WrapperContainer>
-    );
+        <ButtonComp
+          text="LOGIN"
+          onPress={handleLogin}
+          isLoading={loading}
+          style={{ marginBottom: 16 }}
+        />
+
+        <ButtonComp
+          text="Toggle Theme"
+          onPress={toggleTheme}
+          variant="outline"
+        />
+      </View>
+    </WrapperContainer>
+  );
 };
 
 export default Login;

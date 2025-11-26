@@ -1,6 +1,8 @@
 export type AuthStackParamList = {
     Login: undefined;
-    // Add other auth screens here
+    ServiceHome: undefined;
+    ServiceListing: undefined;
+    BookingConfirmation: undefined;
 };
 
 export type MainStackParamList = {
