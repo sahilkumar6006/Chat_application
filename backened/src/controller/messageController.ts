@@ -4,11 +4,16 @@ import { Request, Response } from "express";
 
 const allMessages = async (req: Request, res: Response) => {
     try {
-        const messages = await Message.find({ chat: req.params.chatId })
-        .populate("sender", "-password")
-        .populate("chat", "-password");
+        const { chatId } = req.params;
+        if (!chatId) {
+            return res.status(400).json({ message: "Chat ID is required" });
+        }
+        const messages = await Message.find({ chat: chatId })
+            .populate("sender", "name email image")
+            .populate("chat");
         res.json(messages);
     } catch (error) {
+        console.error('Error fetching messages:', error);
         res.status(400).json({ message: "Internal server error" });
     }
 }
@@ -23,14 +28,14 @@ const sendMessage = async (req: Request, res: Response) => {
         let message = await Message.create({
             content,
             chat: chatId,
-            sender: req.body.user._id,
-        })  
+            sender: req.user._id,
+        })
         // Populate sender and chat fields
         message = await Message.populate(message, {
             path: 'sender',
             select: 'name pic'
         });
-        
+
         message = await Message.populate(message, {
             path: 'chat',
             populate: {
@@ -43,7 +48,7 @@ const sendMessage = async (req: Request, res: Response) => {
             { latestMessage: message._id },
             { new: true }
         );
-       
+
         res.status(200).json(chat);
     } catch (error) {
         res.status(400).json({ message: "Internal server error" });
