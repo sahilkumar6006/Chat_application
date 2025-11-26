@@ -12,7 +12,9 @@ import { useTheme } from '@/context/ThemeContext';
 import useIsRTL from '@/hooks/useIsRTL';
 import useRTLStyles from './styles';
 import { useNavigation } from '@react-navigation/native';
+import { Alert } from 'react-native';
 import Routes from '../../navigation/Routes';
+import { authService } from '@/services/authService';
 // import actions from '@/redux/actions'; // TODO: Implement actions
 // import { useDispatch } from '@/redux/hooks';
 
@@ -28,15 +30,22 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password');
+      return;
+    }
+
     setLoading(true);
     try {
-      // await dispatch(actions.login({ email, password }));
-      console.log('Login attempt:', email, password);
+      const response = await authService.login({ email, password });
+      console.log('Login successful:', response.user);
 
-      setTimeout(() => setLoading(false), 1000); // Simulate API call
-      Navigation.navigate(Routes.SERVICE_HOME);
-    } catch (error) {
-      console.error(error);
+      // Navigate to main tabs after successful login
+      Navigation.navigate(Routes.MAIN_TABS);
+    } catch (error: any) {
+      console.error('Login error:', error);
+      Alert.alert('Login Failed', error.message || 'Invalid email or password');
+    } finally {
       setLoading(false);
     }
   };
@@ -66,6 +75,13 @@ const Login = () => {
           text="LOGIN"
           onPress={handleLogin}
           isLoading={loading}
+          style={{ marginBottom: 16 }}
+        />
+
+        <ButtonComp
+          text="Don't have an account? Register"
+          onPress={() => Navigation.navigate(Routes.REGISTER)}
+          variant="outline"
           style={{ marginBottom: 16 }}
         />
 

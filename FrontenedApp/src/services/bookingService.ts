@@ -1,12 +1,20 @@
 import { CartItem } from '@/redux/slices/cartSlice';
+import axios from 'axios';
+import { Platform } from 'react-native';
+import { secureStorage } from '@/utils/secureStorage';
+
+const URL = Platform.OS === 'ios' ? 'http://localhost:6000/api' : 'http://192.168.0.54:6000/api';
+const API_BASE_URL = URL;
 
 export interface ServiceCategory {
+    _id: string;
     id: string;
     title: string;
     color: string;
 }
 
 export interface Service {
+    _id: string;
     id: string;
     title: string;
     price: number;
@@ -14,43 +22,50 @@ export interface Service {
     categoryId: string;
 }
 
-const MOCK_CATEGORIES: ServiceCategory[] = [
-    { id: '1', title: 'AC', color: '#007AFF' },
-    { id: '2', title: 'Heater', color: '#FF9500' },
-    { id: '3', title: 'Wiring', color: '#FFCC00' },
-    { id: '4', title: 'Inverter', color: '#34C759' },
-];
-
-const MOCK_SERVICES: Service[] = [
-    { id: '1', title: 'AC Gas Refilling', price: 499, description: 'R22, R32, or R410A gas refilling', categoryId: '1' },
-    { id: '2', title: 'AC Deep Cleaning', price: 399, description: 'Indoor & outdoor unit cleaning', categoryId: '1' },
-    { id: '3', title: 'AC Installation', price: 799, description: 'New AC installation', categoryId: '1' },
-    { id: '4', title: 'AC Repair', price: 599, description: 'Compressor, PCB repair etc.', categoryId: '1' },
-    { id: '5', title: 'AC Uninstallation', price: 299, description: 'Safe removal with gas lock', categoryId: '1' },
-];
-
 export const bookingService = {
     getCategories: async (): Promise<ServiceCategory[]> => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(MOCK_CATEGORIES);
-            }, 500);
-        });
+        try {
+            const response = await axios.get<ServiceCategory[]>(`${API_BASE_URL}/service/categories`);
+            // Map _id to id for compatibility
+            return response.data.map(cat => ({ ...cat, id: cat._id }));
+        } catch (error: any) {
+            console.error('Error fetching categories:', error);
+            throw new Error(error.response?.data?.message || 'Failed to fetch categories');
+        }
     },
 
     getServices: async (categoryId: string): Promise<Service[]> => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(MOCK_SERVICES.filter(s => s.categoryId === categoryId || categoryId === '1')); // Fallback to '1' for demo
-            }, 800);
-        });
+        try {
+            const response = await axios.get<Service[]>(`${API_BASE_URL}/service/services/${categoryId}`);
+            // Map _id to id for compatibility
+            return response.data.map(service => ({ ...service, id: service._id }));
+        } catch (error: any) {
+            console.error('Error fetching services:', error);
+            throw new Error(error.response?.data?.message || 'Failed to fetch services');
+        }
     },
 
     createBooking: async (items: CartItem[], totalAmount: number): Promise<{ success: boolean; bookingId: string }> => {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve({ success: true, bookingId: `BK-${Math.floor(Math.random() * 10000)}` });
-            }, 1500);
-        });
+        try {
+            const token = await secureStorage.getItem('authToken');
+            if (!token) {
+                throw new Error('No authentication token found');
+            }
+
+            const response = await axios.post(
+                `${API_BASE_URL}/service/bookings`,
+                { items, totalAmount },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+
+            return response.data;
+        } catch (error: any) {
+            console.error('Error creating booking:', error);
+            throw new Error(error.response?.data?.message || 'Failed to create booking');
+        }
     },
 };
