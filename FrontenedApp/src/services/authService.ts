@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { secureStorage } from '@/utils/secureStorage';
+import { secureStorage } from '@app/utils/secureStorage';
 import { Platform } from 'react-native';
 
 

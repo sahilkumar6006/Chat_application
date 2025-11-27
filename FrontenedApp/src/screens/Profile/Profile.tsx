@@ -3,15 +3,15 @@
  */
 import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Alert } from 'react-native';
-import WrapperContainer from '@/components/WrapperContainer';
-import HeaderComp from '@/components/HeaderComp';
-import TextComp from '@/components/TextComp';
-import ButtonComp from '@/components/ButtonComp';
-import { useTheme } from '@/context/ThemeContext';
+import WrapperContainer from '@app/components/WrapperContainer';
+import HeaderComp from '@app/components/HeaderComp';
+import TextComp from '@app/components/TextComp';
+import ButtonComp from '@app/components/ButtonComp';
+import { useTheme } from '@app/context/ThemeContext';
 import { useNavigation } from '@react-navigation/native';
 import Routes from '../../navigation/Routes';
-import { authService, User } from '@/services/authService';
-import { Colors } from '@/styles/colors';
+import { authService, User } from '@app/services/authService';
+import { Colors } from '@app/styles/colors';
 
 const Profile = () => {
     const { theme } = useTheme();

@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import TextComp from './TextComp';
-import { useTheme } from '@/context/ThemeContext';
-import { Colors } from '@/styles/colors';
-import { moderateScale } from '@/styles/scaling';
-import { IChat, IUser } from '@/typings/ChatTypes';
+import { useTheme } from '@app/context/ThemeContext';
+import { Colors } from '@app/styles/colors';
+import { moderateScale } from '@app/styles/scaling';
+import { IChat, IUser } from '@app/typings/ChatTypes';
 
 interface ChatListItemProps {
     chat: IChat;

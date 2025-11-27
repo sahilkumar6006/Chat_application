@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, SafeAreaView, StatusBar, ViewStyle } from 'react-native';
-import { useTheme } from '@/context/ThemeContext';
-import { Colors } from '@/styles/colors';
+import { useTheme } from '@app/context/ThemeContext';
+import { Colors } from '@app/styles/colors';
 
 interface WrapperContainerProps {
     children: React.ReactNode;

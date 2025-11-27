@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, ActivityIndicator, LayoutAnimation, Platform, UIManager } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '@/navigation/types';
-import ServiceHeader from '@/components/ServiceHeader';
-import ServiceItem from '@/components/ServiceItem';
-import { Colors } from '@/styles/colors';
-import { useTheme } from '@/context/ThemeContext';
-import Routes from '@/navigation/Routes';
-import TextComp from '@/components/TextComp';
+import { AuthStackParamList } from '@app/navigation/types';
+import ServiceHeader from '@app/components/ServiceHeader';
+import ServiceItem from '@app/components/ServiceItem';
+import { Colors } from '@app/styles/colors';
+import { useTheme } from '@app/context/ThemeContext';
+import Routes from '@app/navigation/Routes';
+import TextComp from '@app/components/TextComp';
 import { TouchableOpacity } from 'react-native';
-import { useAppDispatch, useAppSelector } from '@/redux/hooks';
-import { addToCart, removeFromCart } from '@/redux/slices/cartSlice';
-import { bookingService, Service } from '@/services/bookingService';
+import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
+import { addToCart, removeFromCart } from '@app/redux/slices/cartSlice';
+import { bookingService, Service } from '@app/services/bookingService';
 
 if (Platform.OS === 'android') {
     if (UIManager.setLayoutAnimationEnabledExperimental) {

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { secureStorage } from '@/utils/secureStorage';
+import { secureStorage } from '@app/utils/secureStorage';
 
 const apiInstance = axios.create({
     baseURL: 'https://api.example.com', // Replace with actual API URL

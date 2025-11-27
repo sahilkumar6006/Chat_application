@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Colors } from '@/styles/colors';
-import { useTheme } from '@/context/ThemeContext';
+import { Colors } from '@app/styles/colors';
+import { useTheme } from '@app/context/ThemeContext';
 
 interface ServiceItemProps {
     title: string;

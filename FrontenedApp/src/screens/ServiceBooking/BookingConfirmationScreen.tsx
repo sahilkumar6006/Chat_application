@@ -10,15 +10,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import ServiceHeader from '@/components/ServiceHeader';
-import BookingSummaryCard from '@/components/BookingSummaryCard';
-import { Colors } from '@/styles/colors';
-import { useTheme } from '@/context/ThemeContext';
-import TextComp from '@/components/TextComp';
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { bookingService } from '@/services/bookingService';
-import { clearCart } from '@/redux/slices/cartSlice';
-import Routes from '@/navigation/Routes';
+import ServiceHeader from '@app/components/ServiceHeader';
+import BookingSummaryCard from '@app/components/BookingSummaryCard';
+import { Colors } from '@app/styles/colors';
+import { useTheme } from '@app/context/ThemeContext';
+import TextComp from '@app/components/TextComp';
+import { useAppSelector, useAppDispatch } from '@app/redux/hooks';
+import { bookingService } from '@app/services/bookingService';
+import { clearCart } from '@app/redux/slices/cartSlice';
+import Routes from '@app/navigation/Routes';
 
 const BookingConfirmationScreen = () => {
   const navigation = useNavigation();

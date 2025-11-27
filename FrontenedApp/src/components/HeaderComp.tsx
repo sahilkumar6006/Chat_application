@@ -2,10 +2,10 @@ import React from 'react';
 import { View, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import TextComp from './TextComp';
-import { useTheme } from '@/context/ThemeContext';
-import useIsRTL from '@/hooks/useIsRTL';
-import { Colors } from '@/styles/colors';
-import { moderateScale } from '@/styles/scaling';
+import { useTheme } from '@app/context/ThemeContext';
+import useIsRTL from '@app/hooks/useIsRTL';
+import { Colors } from '@app/styles/colors';
+import { moderateScale } from '@app/styles/scaling';
 
 interface HeaderCompProps {
     title?: string;

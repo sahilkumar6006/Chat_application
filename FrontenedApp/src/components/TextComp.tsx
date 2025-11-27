@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, TextProps, StyleSheet, TextStyle } from 'react-native';
 import { useTranslation } from 'react-i18next';
-import { useTheme } from '@/context/ThemeContext';
-import { Colors } from '@/styles/colors';
-import fontFamily from '@/styles/fontFamily';
-import { moderateScale } from '@/styles/scaling';
+import { useTheme } from '@app/context/ThemeContext';
+import { Colors } from '@app/styles/colors';
+import fontFamily from '@app/styles/fontFamily';
+import { moderateScale } from '@app/styles/scaling';
 
 interface TextCompProps extends TextProps {
     text: string;

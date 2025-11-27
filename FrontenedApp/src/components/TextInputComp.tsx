@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, TextInput, StyleSheet, TextInputProps, ViewStyle } from 'react-native';
 import TextComp from './TextComp';
-import { useTheme } from '@/context/ThemeContext';
-import useIsRTL from '@/hooks/useIsRTL';
-import { Colors } from '@/styles/colors';
-import { moderateScale } from '@/styles/scaling';
-import fontFamily from '@/styles/fontFamily';
+import { useTheme } from '@app/context/ThemeContext';
+import useIsRTL from '@app/hooks/useIsRTL';
+import { Colors } from '@app/styles/colors';
+import { moderateScale } from '@app/styles/scaling';
+import fontFamily from '@app/styles/fontFamily';
 
 interface TextInputCompProps extends TextInputProps {
     label?: string;

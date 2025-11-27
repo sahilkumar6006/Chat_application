@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { StyleSheet } from 'react-native';
-import { ThemeType, Colors } from '@/styles/colors';
+import { ThemeType, Colors } from '@app/styles/colors';
 
 const useRTLStyles = <T extends StyleSheet.NamedStyles<T> | StyleSheet.NamedStyles<any>>(
     styleFactory: (isRTL: boolean, theme: ThemeType, colors: typeof Colors.light) => T,

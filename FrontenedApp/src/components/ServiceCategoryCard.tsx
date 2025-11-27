@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View, ViewStyle } from 'react-native';
-import { Colors } from '@/styles/colors';
-import { useTheme } from '@/context/ThemeContext';
+import { Colors } from '@app/styles/colors';
+import { useTheme } from '@app/context/ThemeContext';
 
 interface ServiceCategoryCardProps {
     title: string;

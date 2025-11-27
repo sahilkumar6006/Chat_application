@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useTheme } from '@/context/ThemeContext';
-import { Colors } from '@/styles/colors';
-import { moderateScale } from '@/styles/scaling';
+import { useTheme } from '@app/context/ThemeContext';
+import { Colors } from '@app/styles/colors';
+import { moderateScale } from '@app/styles/scaling';
 import TextComp from './TextComp';
 
 interface ServiceHeaderProps {

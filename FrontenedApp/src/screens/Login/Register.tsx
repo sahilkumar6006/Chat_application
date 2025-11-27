@@ -3,18 +3,18 @@
  */
 import React, { useState } from 'react';
 import { View, Alert } from 'react-native';
-import WrapperContainer from '@/components/WrapperContainer';
-import HeaderComp from '@/components/HeaderComp';
-import TextComp from '@/components/TextComp';
-import TextInputComp from '@/components/TextInputComp';
-import ButtonComp from '@/components/ButtonComp';
-import { useTheme } from '@/context/ThemeContext';
-import useIsRTL from '@/hooks/useIsRTL';
+import WrapperContainer from '@app/components/WrapperContainer';
+import HeaderComp from '@app/components/HeaderComp';
+import TextComp from '@app/components/TextComp';
+import TextInputComp from '@app/components/TextInputComp';
+import ButtonComp from '@app/components/ButtonComp';
+import { useTheme } from '@app/context/ThemeContext';
+import useIsRTL from '@app/hooks/useIsRTL';
 import { useNavigation } from '@react-navigation/native';
 import Routes from '../../navigation/Routes';
-import { authService } from '@/services/authService';
+import { authService } from '@app/services/authService';
 import { StyleSheet } from 'react-native';
-import { Colors } from '@/styles/colors';
+import { Colors } from '@app/styles/colors';
 
 const Register = () => {
     const { theme } = useTheme();

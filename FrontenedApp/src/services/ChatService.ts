@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_BASE_URL, authService } from "./authService";
-import { IChat, IMessage } from "@/typings/ChatTypes";
+import { IChat, IMessage } from "@app/typings/ChatTypes";
 
 const getAuthHeaders = async () => {
     const token = await authService.getToken();

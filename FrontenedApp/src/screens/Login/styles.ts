@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
-import { Colors, ThemeType } from '@/styles/colors';
-import fontFamily from '@/styles/fontFamily';
-import { moderateScale } from '@/styles/scaling';
+import { Colors, ThemeType } from '@app/styles/colors';
+import fontFamily from '@app/styles/fontFamily';
+import { moderateScale } from '@app/styles/scaling';
 import { useMemo } from 'react';
 
 const useRTLStyles = (isRTL: boolean, theme: ThemeType) => {

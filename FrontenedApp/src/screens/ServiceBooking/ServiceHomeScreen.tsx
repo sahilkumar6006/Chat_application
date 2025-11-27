@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, Text, Dimensions, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '@/navigation/types';
-import ServiceHeader from '@/components/ServiceHeader';
-import ServiceCategoryCard from '@/components/ServiceCategoryCard';
-import { Colors } from '@/styles/colors';
-import { useTheme } from '@/context/ThemeContext';
-import Routes from '@/navigation/Routes';
-import { bookingService, ServiceCategory } from '@/services/bookingService';
+import { AuthStackParamList } from '@app/navigation/types';
+import ServiceHeader from '@app/components/ServiceHeader';
+import ServiceCategoryCard from '@app/components/ServiceCategoryCard';
+import { Colors } from '@app/styles/colors';
+import { useTheme } from '@app/context/ThemeContext';
+import Routes from '@app/navigation/Routes';
+import { bookingService, ServiceCategory } from '@app/services/bookingService';
 
 const { width } = Dimensions.get('window');
 

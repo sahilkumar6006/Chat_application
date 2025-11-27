@@ -1,9 +1,9 @@
 import React from 'react';
 import { TouchableOpacity, ActivityIndicator, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 import TextComp from './TextComp';
-import { useTheme } from '@/context/ThemeContext';
-import { Colors } from '@/styles/colors';
-import { moderateScale } from '@/styles/scaling';
+import { useTheme } from '@app/context/ThemeContext';
+import { Colors } from '@app/styles/colors';
+import { moderateScale } from '@app/styles/scaling';
 
 interface ButtonCompProps {
     text: string;

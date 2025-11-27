@@ -3,20 +3,20 @@
  */
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import WrapperContainer from '@/components/WrapperContainer';
-import HeaderComp from '@/components/HeaderComp';
-import TextComp from '@/components/TextComp';
-import TextInputComp from '@/components/TextInputComp';
-import ButtonComp from '@/components/ButtonComp';
-import { useTheme } from '@/context/ThemeContext';
-import useIsRTL from '@/hooks/useIsRTL';
+import WrapperContainer from '@app/components/WrapperContainer';
+import HeaderComp from '@app/components/HeaderComp';
+import TextComp from '@app/components/TextComp';
+import TextInputComp from '@app/components/TextInputComp';
+import ButtonComp from '@app/components/ButtonComp';
+import { useTheme } from '@app/context/ThemeContext';
+import useIsRTL from '@app/hooks/useIsRTL';
 import useRTLStyles from './styles';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import Routes from '../../navigation/Routes';
-import { authService } from '@/services/authService';
-// import actions from '@/redux/actions'; // TODO: Implement actions
-// import { useDispatch } from '@/redux/hooks';
+import { authService } from '@app/services/authService';
+// import actions from '@app/redux/actions'; // TODO: Implement actions
+// import { useDispatch } from '@app/redux/hooks';
 
 const Login = () => {
   const { theme, toggleTheme } = useTheme();

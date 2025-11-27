@@ -1,8 +1,11 @@
 export const commonColors = {
     primary: '#007AFF',
+    primaryLight: '#5AC8FA',
+    primaryDark: '#0051D5',
     success: '#34C759',
     error: '#FF3B30',
     warning: '#FF9500',
+    info: '#5AC8FA',
 };
 
 export type ThemeType = 'light' | 'dark';
@@ -10,16 +13,38 @@ export type ThemeType = 'light' | 'dark';
 export const Colors = {
     light: {
         background: '#FFFFFF',
+        backgroundSecondary: '#F2F2F7',
+        backgroundTertiary: '#E5E5EA',
         surface: '#F2F2F7',
+        card: '#FFFFFF',
         text: '#000000',
         textSecondary: '#3C3C43',
+        textTertiary: '#8E8E93',
+        textPlaceholder: '#C7C7CC',
+        textDisabled: '#AEAEB2',
+        border: '#E5E5EA',
+        borderMedium: '#C7C7CC',
+        borderDark: '#8E8E93',
+        shadow: '#000000',
+        overlay: 'rgba(0, 0, 0, 0.3)',
         ...commonColors,
     },
     dark: {
         background: '#000000',
+        backgroundSecondary: '#1C1C1E',
+        backgroundTertiary: '#2C2C2E',
         surface: '#1C1C1E',
+        card: '#1C1C1E',
         text: '#FFFFFF',
         textSecondary: '#EBEBF5',
+        textTertiary: '#8E8E93',
+        textPlaceholder: '#8E8E93',
+        textDisabled: '#636366',
+        border: '#38383A',
+        borderMedium: '#48484A',
+        borderDark: '#636366',
+        shadow: '#000000',
+        overlay: 'rgba(0, 0, 0, 0.6)',
         ...commonColors,
     },
 };
