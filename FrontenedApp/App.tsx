@@ -14,6 +14,12 @@ import Navigation from '@app/navigation';
 import '@app/lang/i18n'; // Initialize i18n
 import { StatusBar } from 'react-native';
 import StripeContainer from '@app/providers/StripeContainer';
+import {
+  requestUserPermission,
+  getFCMToken,
+  notificationListener,
+} from '@app/services/notificationHelper';
+
 
 
 /**
@@ -22,6 +28,20 @@ import StripeContainer from '@app/providers/StripeContainer';
  * @returns {JSX.Element} The rendered app
  */
 const App = () => {
+  React.useEffect(() => {
+    const initNotifications = async () => {
+      await requestUserPermission();
+      await getFCMToken();
+    };
+
+    initNotifications();
+    const unsubscribe = notificationListener();
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
