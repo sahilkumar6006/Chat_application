@@ -3,8 +3,9 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 import { secureStorage } from '@app/utils/secureStorage';
 
-const URL = Platform.OS === 'ios' ? 'http://localhost:6000/api' : 'http://192.168.0.54:6000/api';
-const API_BASE_URL = URL;
+import { API_URL } from '@env';
+
+const API_BASE_URL = API_URL;
 
 export interface ServiceCategory {
     _id: string;

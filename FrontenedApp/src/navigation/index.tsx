@@ -13,6 +13,7 @@ import ChatDetailScreen from '@app/screens/Chat/ChatDetailScreen';
 import UserListScreen from '@app/screens/Chat/UserListScreen';
 import ReelsScreen from '@app/screens/Reels/ReelsScreen';
 import OnBoard from '@app/screens/OnBoard/OnBoard';
+import PaymentScreen from '@app/screens/Payment/PaymentScreen';
 import Routes from './Routes';
 import { AuthStackParamList } from './types';
 import { Colors } from '@app/styles/colors';
@@ -111,6 +112,7 @@ const Navigation = () => {
                 <Stack.Screen name={Routes.BOOKING_CONFIRMATION as keyof AuthStackParamList} component={BookingConfirmationScreen} />
                 <Stack.Screen name={Routes.CHAT_DETAIL as keyof AuthStackParamList} component={ChatDetailScreen} />
                 <Stack.Screen name={Routes.USER_LIST as keyof AuthStackParamList} component={UserListScreen} />
+                <Stack.Screen name={Routes.PAYMENT as keyof AuthStackParamList} component={PaymentScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

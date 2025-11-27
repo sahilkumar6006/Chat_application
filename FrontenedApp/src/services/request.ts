@@ -2,10 +2,10 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Platform } from 'react-native';
 import { secureStorage } from '@app/utils/secureStorage';
 
+import { API_URL } from '@env';
+
 // Base URL configuration
-const BASE_URL = Platform.OS === 'ios'
-    ? 'http://localhost:6000/api'
-    : 'http://192.168.0.54:6000/api';
+const BASE_URL = API_URL;
 
 /**
  * Axios instance with interceptors for authentication and error handling

@@ -13,6 +13,9 @@ import { ThemeProvider } from '@app/context/ThemeContext';
 import Navigation from '@app/navigation';
 import '@app/lang/i18n'; // Initialize i18n
 import { StatusBar } from 'react-native';
+import { StripeProvider } from '@stripe/stripe-react-native';
+
+import { STRIPE_PUBLISHABLE_KEY } from '@env';
 
 /**
  * Main application component that serves as the entry point for the app.
@@ -24,11 +27,15 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
-          <SafeAreaProvider style={{ flex: 1 }}>
-            <StatusBar />
-            <Navigation />
-            <Toast />
-          </SafeAreaProvider>
+          <StripeProvider
+            publishableKey={STRIPE_PUBLISHABLE_KEY}
+          >
+            <SafeAreaProvider style={{ flex: 1 }}>
+              <StatusBar />
+              <Navigation />
+              <Toast />
+            </SafeAreaProvider>
+          </StripeProvider>
         </ThemeProvider>
       </PersistGate>
     </Provider>

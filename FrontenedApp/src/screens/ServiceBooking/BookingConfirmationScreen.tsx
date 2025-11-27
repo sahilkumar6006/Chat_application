@@ -20,9 +20,12 @@ import { AppDispatch } from '@app/redux/store';
 import { selectCartItems } from '@app/modules/cart';
 import { bookingService } from '@app/services/bookingService';
 import { clearCart } from '@app/modules/cart';
+import { useStripe } from '@stripe/stripe-react-native';
 import Routes from '@app/navigation/Routes';
+import request from '@app/services/request';
 
 const BookingConfirmationScreen = () => {
+  const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const navigation = useNavigation();
   const { theme } = useTheme();
   const colors = Colors[theme];
@@ -43,14 +46,48 @@ const BookingConfirmationScreen = () => {
     { label: 'Total Amount', value: finalTotal, isTotal: true },
   ];
 
-  const handleBookService = async () => {
-    setLoading(true);
+  const fetchPaymentIntentClientSecret = async () => {
     try {
-      const result = await bookingService.createBooking(cartItems, finalTotal);
-      if (result.success) {
+      const response = await request.post('payment/intents', {
+        amount: Math.round(finalTotal * 100),
+        currency: 'inr',
+      });
+      return response.data.clientSecret;
+    } catch (error) {
+      console.error('Error fetching payment intent:', error);
+      Alert.alert('Error', 'Failed to fetch payment intent');
+      return null;
+    }
+  };
+
+  const handlePayment = async (bookingId: string) => {
+    const clientSecret = await fetchPaymentIntentClientSecret();
+
+    if (!clientSecret) {
+      setLoading(false);
+      Alert.alert('Error', 'Booking created but payment initialization failed.');
+      return;
+    }
+
+    const { error } = await initPaymentSheet({
+      paymentIntentClientSecret: clientSecret,
+      merchantDisplayName: 'Chat App',
+      returnURL: 'chatapp://payment-complete',
+      customFlow: false,
+    });
+
+    if (error) {
+      Alert.alert('Error', `Booking created but payment setup failed: ${error.message}`);
+      setLoading(false);
+    } else {
+      const { error: paymentError } = await presentPaymentSheet();
+      if (paymentError) {
+        Alert.alert('Payment Failed', 'Booking created but payment was not completed.');
+        setLoading(false);
+      } else {
         Alert.alert(
           'Booking Confirmed!',
-          `Your booking ID is ${result.bookingId}`,
+          `Your booking ID is ${bookingId}\nPayment Successful`,
           [
             {
               text: 'OK',
@@ -61,10 +98,20 @@ const BookingConfirmationScreen = () => {
             },
           ],
         );
+        setLoading(false);
+      }
+    }
+  };
+
+  const handleBookService = async () => {
+    setLoading(true);
+    try {
+      const result = await bookingService.createBooking(cartItems, finalTotal);
+      if (result.success) {
+        await handlePayment(result.bookingId);
       }
     } catch (error) {
       Alert.alert('Error', 'Failed to book service. Please try again.');
-    } finally {
       setLoading(false);
     }
   };
