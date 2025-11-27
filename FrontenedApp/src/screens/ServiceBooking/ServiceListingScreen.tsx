@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, ActivityIndicator, LayoutAnimation, Platform, UIManager } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@app/navigation/types';
 import ServiceHeader from '@app/components/ServiceHeader';
@@ -22,8 +22,11 @@ if (Platform.OS === 'android') {
     }
 }
 
+type ServiceListingRouteProp = RouteProp<AuthStackParamList, 'ServiceListing'>;
+
 const ServiceListingScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
+    const route = useRoute<ServiceListingRouteProp>();
     const { theme } = useTheme();
     const colors = Colors[theme];
     const dispatch = useDispatch<AppDispatch>();
@@ -31,9 +34,14 @@ const ServiceListingScreen = () => {
     const [services, setServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
 
+    // Get categoryId from route params
+    const categoryId = (route.params as any)?.categoryId;
+
     useEffect(() => {
-        loadServices();
-    }, []);
+        if (categoryId) {
+            loadServices();
+        }
+    }, [categoryId]);
 
     useEffect(() => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -41,7 +49,8 @@ const ServiceListingScreen = () => {
 
     const loadServices = async () => {
         try {
-            const data = await bookingService.getServices('1'); // Hardcoded category for now
+            // Use the categoryId from navigation params (MongoDB ObjectId)
+            const data = await bookingService.getServices(categoryId);
             setServices(data);
         } catch (error) {
             console.error('Failed to load services', error);

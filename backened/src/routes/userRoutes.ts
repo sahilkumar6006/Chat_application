@@ -4,7 +4,7 @@ import authMiddleware from "../middleware/authMiddleware";
 
 const UserRoutes = Router();
 
-UserRoutes.get("/", getAllUser);
+UserRoutes.get("/", authMiddleware, getAllUser);
 UserRoutes.post("/", registerUser);
 UserRoutes.post("/auth", authUser);
 UserRoutes.get("/profile", authMiddleware, getUserProfile);

@@ -5,13 +5,14 @@ import {
     StyleSheet,
     RefreshControl,
     ActivityIndicator,
+    TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { ChatService } from '@app/services/ChatService';
-import { authService } from '@app/services/authService';
 import { IChat } from '@app/typings/ChatTypes';
 import { useTheme } from '@app/context/ThemeContext';
 import { Colors } from '@app/styles/colors';
+import { moderateScale } from '@app/styles/scaling';
 import WrapperContainer from '@app/components/WrapperContainer';
 import HeaderComp from '@app/components/HeaderComp';
 import TextComp from '@app/components/TextComp';
@@ -32,11 +33,8 @@ export const Chat = () => {
 
     const loadChats = async () => {
         try {
-            const user = await authService.getUser();
-            if (user) {
-                const chatData = await ChatService.getChats(user.id);
-                setChats(chatData);
-            }
+            const chatData = await ChatService.getChats();
+            setChats(chatData);
         } catch (error) {
             console.error('Error loading chats:', error);
         } finally {
@@ -51,7 +49,11 @@ export const Chat = () => {
     };
 
     const handleChatPress = (chat: IChat) => {
-        navigation.navigate(Routes.CHAT_DETAIL as never, { chatId: chat.id } as never);
+        navigation.navigate(Routes.CHAT_DETAIL as never, { chatId: chat._id } as never);
+    };
+
+    const handleNewChat = () => {
+        navigation.navigate(Routes.USER_LIST as never);
     };
 
     const styles = StyleSheet.create({
@@ -74,6 +76,27 @@ export const Chat = () => {
             fontSize: 16,
             color: colors.textSecondary,
             textAlign: 'center',
+        },
+        fab: {
+            position: 'absolute',
+            right: moderateScale(20),
+            bottom: moderateScale(20),
+            width: moderateScale(56),
+            height: moderateScale(56),
+            borderRadius: moderateScale(28),
+            backgroundColor: colors.primary,
+            justifyContent: 'center',
+            alignItems: 'center',
+            elevation: 4,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+        },
+        fabText: {
+            color: '#FFFFFF',
+            fontSize: moderateScale(24),
+            fontWeight: '600',
         },
     });
 
@@ -102,7 +125,7 @@ export const Chat = () => {
             ) : (
                 <FlatList
                     data={chats}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item._id}
                     renderItem={({ item }) => (
                         <ChatListItem
                             chat={item}
@@ -118,6 +141,9 @@ export const Chat = () => {
                     }
                 />
             )}
+            <TouchableOpacity style={styles.fab} onPress={handleNewChat} activeOpacity={0.8}>
+                <TextComp text="+" style={styles.fabText} />
+            </TouchableOpacity>
         </WrapperContainer>
     );
 };

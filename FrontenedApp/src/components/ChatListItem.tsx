@@ -1,20 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import TextComp from './TextComp';
 import { useTheme } from '@app/context/ThemeContext';
 import { Colors } from '@app/styles/colors';
 import { moderateScale } from '@app/styles/scaling';
 import { IChat, IUser } from '@app/typings/ChatTypes';
+import { authService } from '@app/services/authService';
 
 interface ChatListItemProps {
     chat: IChat;
-    currentUserId: string;
     onPress: () => void;
 }
 
-const ChatListItem: React.FC<ChatListItemProps> = ({ chat, currentUserId, onPress }) => {
+const ChatListItem: React.FC<ChatListItemProps> = ({ chat, onPress }) => {
     const { theme } = useTheme();
     const colors = Colors[theme];
+    const [currentUserId, setCurrentUserId] = useState<string>('');
+
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            const user = await authService.getUser();
+            if (user) {
+                setCurrentUserId(user._id);
+            }
+        };
+        fetchCurrentUser();
+    }, []);
 
     // Get the other user in the chat (for one-on-one chats)
     const getOtherUser = (): IUser | undefined => {

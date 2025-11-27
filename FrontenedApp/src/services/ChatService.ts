@@ -1,6 +1,6 @@
 import axios from "axios";
 import { API_BASE_URL, authService } from "./authService";
-import { IChat, IMessage } from "@app/typings/ChatTypes";
+import { IChat, IMessage, IUser } from "@app/typings/ChatTypes";
 
 const getAuthHeaders = async () => {
     const token = await authService.getToken();
@@ -21,6 +21,18 @@ export const ChatService = {
         } catch (error: any) {
             console.error('Error fetching chats:', error);
             throw new Error(error.response?.data?.message || 'Failed to fetch chats');
+        }
+    },
+
+    // Get list of all users (excluding current user)
+    getUserList: async (): Promise<IUser[]> => {
+        try {
+            const config = await getAuthHeaders();
+            const response = await axios.get(`${API_BASE_URL}/user`, config);
+            return response.data;
+        } catch (error: any) {
+            console.error('Error fetching users:', error);
+            throw new Error(error.response?.data?.message || 'Failed to fetch users');
         }
     },
 

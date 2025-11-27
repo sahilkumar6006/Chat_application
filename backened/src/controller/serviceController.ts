@@ -18,6 +18,14 @@ const getCategories = async (req: Request, res: Response) => {
 const getServicesByCategory = async (req: Request, res: Response) => {
     try {
         const { categoryId } = req.params;
+
+        // Validate if categoryId is a valid MongoDB ObjectId
+        if (!categoryId.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({
+                message: "Invalid category ID format. Must be a valid MongoDB ObjectId"
+            });
+        }
+
         const services = await Service.find({ categoryId });
         res.json(services);
     } catch (error) {

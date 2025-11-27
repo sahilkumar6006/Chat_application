@@ -33,24 +33,28 @@ const sendMessage = async (req: Request, res: Response) => {
         // Populate sender and chat fields
         message = await Message.populate(message, {
             path: 'sender',
-            select: 'name pic'
+            select: 'name email image'
         });
 
         message = await Message.populate(message, {
             path: 'chat',
             populate: {
                 path: 'users',
-                select: 'name pic email'
+                select: 'name email image'
             }
         });
-        const chat = await Chat.findByIdAndUpdate(
+
+        // Update chat's latest message
+        await Chat.findByIdAndUpdate(
             chatId,
             { latestMessage: message._id },
             { new: true }
         );
 
-        res.status(200).json(chat);
+        // Return the populated message, not the chat
+        res.status(200).json(message);
     } catch (error) {
+        console.error('Error sending message:', error);
         res.status(400).json({ message: "Internal server error" });
     }
 }

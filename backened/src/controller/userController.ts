@@ -4,7 +4,9 @@ import jwt from "jsonwebtoken";
 
 const getAllUser = async (req: Request, res: Response) => {
     try {
-        const users = await User.find();
+        const currentUserId = req.user?._id;
+        // Exclude current user and password field
+        const users = await User.find({ _id: { $ne: currentUserId } }).select('-password');
         res.json(users);
     } catch (error) {
         console.error(error);

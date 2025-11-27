@@ -9,5 +9,6 @@ export default {
     SERVICE_LISTING: 'ServiceListing',
     CHAT: 'Chat',
     CHAT_DETAIL: 'ChatDetail',
+    USER_LIST: 'UserList',
     BOOKING_CONFIRMATION: 'BookingConfirmation',
 } as const;

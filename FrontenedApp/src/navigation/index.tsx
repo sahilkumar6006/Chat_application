@@ -9,6 +9,8 @@ import Login from '@app/screens/Login/Login';
 import Register from '@app/screens/Login/Register';
 import Profile from '@app/screens/Profile/Profile';
 import SplashScreen from '@app/screens/Splash/SplashScreen';
+import ChatDetailScreen from '@app/screens/Chat/ChatDetailScreen';
+import UserListScreen from '@app/screens/Chat/UserListScreen';
 import Routes from './Routes';
 import { AuthStackParamList } from './types';
 import { Colors } from '@app/styles/colors';
@@ -76,6 +78,8 @@ const Navigation = () => {
                 <Stack.Screen name={Routes.MAIN_TABS as keyof AuthStackParamList} component={MainTabs} />
                 <Stack.Screen name={Routes.SERVICE_LISTING as keyof AuthStackParamList} component={ServiceListingScreen} />
                 <Stack.Screen name={Routes.BOOKING_CONFIRMATION as keyof AuthStackParamList} component={BookingConfirmationScreen} />
+                <Stack.Screen name={Routes.CHAT_DETAIL as keyof AuthStackParamList} component={ChatDetailScreen} />
+                <Stack.Screen name={Routes.USER_LIST as keyof AuthStackParamList} component={UserListScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

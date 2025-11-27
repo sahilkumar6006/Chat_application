@@ -34,8 +34,8 @@ const ServiceHomeScreen = () => {
         }
     };
 
-    const handleCategoryPress = (category: string) => {
-        navigation.navigate(Routes.SERVICE_LISTING);
+    const handleCategoryPress = (category: ServiceCategory) => {
+        navigation.navigate(Routes.SERVICE_LISTING, { categoryId: category._id } as never);
     };
 
     const renderHeader = () => (
@@ -84,7 +84,7 @@ const ServiceHomeScreen = () => {
                     <ServiceCategoryCard
                         title={item.title}
                         color={item.color}
-                        onPress={() => handleCategoryPress(item.title)}
+                        onPress={() => handleCategoryPress(item)}
                         style={{ width: (width - 48) / 2 }}
                     />
                 )}
