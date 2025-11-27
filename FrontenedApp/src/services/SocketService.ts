@@ -1,7 +1,16 @@
 import io, { Socket } from 'socket.io-client';
 import { Platform } from 'react-native';
 
-const BASE_URL = Platform.OS === 'ios' ? 'http://localhost:6000' : 'http://192.168.0.54:6000';
+import Config from 'react-native-config';
+
+const getBaseUrl = () => {
+    if (Config.API_BASE_URL) {
+        return Config.API_BASE_URL.replace('/api', '');
+    }
+    return Platform.OS === 'ios' ? 'http://localhost:6000' : 'http://192.168.0.54:6000';
+};
+
+const BASE_URL = getBaseUrl();
 
 class SocketService {
     private socket: Socket | null = null;
