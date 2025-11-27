@@ -23,6 +23,7 @@ import { clearCart } from '@app/modules/cart';
 import { useStripe } from '@stripe/stripe-react-native';
 import Routes from '@app/navigation/Routes';
 import request from '@app/services/request';
+import { getFCMToken } from '@app/services/notificationHelper';
 
 const BookingConfirmationScreen = () => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -85,6 +86,19 @@ const BookingConfirmationScreen = () => {
         Alert.alert('Payment Failed', 'Booking created but payment was not completed.');
         setLoading(false);
       } else {
+        // Payment Successful
+        const fcmToken = await getFCMToken();
+        if (fcmToken) {
+          try {
+            await request.post('payment/success', {
+              fcmToken,
+              bookingId,
+            });
+          } catch (error) {
+            console.error('Error sending payment success notification:', error);
+          }
+        }
+
         Alert.alert(
           'Booking Confirmed!',
           `Your booking ID is ${bookingId}\nPayment Successful`,

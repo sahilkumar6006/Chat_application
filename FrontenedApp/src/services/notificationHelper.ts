@@ -1,5 +1,6 @@
 import messaging from '@react-native-firebase/messaging';
 import { PermissionsAndroid, Platform } from 'react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 
 export const requestUserPermission = async () => {
     if (Platform.OS === 'ios') {
@@ -36,6 +37,32 @@ export const getFCMToken = async () => {
     }
 };
 
+export const onDisplayNotification = async (remoteMessage: any) => {
+    // Request permissions (required for iOS)
+    await notifee.requestPermission();
+
+    // Create a channel (required for Android)
+    const channelId = await notifee.createChannel({
+        id: 'default',
+        name: 'Default Channel',
+        importance: AndroidImportance.HIGH,
+    });
+
+    // Display a notification
+    await notifee.displayNotification({
+        title: remoteMessage.notification?.title || 'New Message',
+        body: remoteMessage.notification?.body || 'You have a new message',
+        android: {
+            channelId,
+            // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
+            // pressAction is needed if you want the notification to open the app when pressed
+            pressAction: {
+                id: 'default',
+            },
+        },
+    });
+};
+
 export const notificationListener = () => {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
 
@@ -63,8 +90,7 @@ export const notificationListener = () => {
     // Foreground message handling
     const unsubscribe = messaging().onMessage(async remoteMessage => {
         console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
-        // You can show a local notification here using react-native-notifee or similar if needed
-        // For now, we just log it. Alerting might be too intrusive.
+        await onDisplayNotification(remoteMessage);
     });
 
     return unsubscribe;
