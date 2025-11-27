@@ -12,6 +12,7 @@ import { store, persistor } from '@app/redux/store';
 import { ThemeProvider } from '@app/context/ThemeContext';
 import Navigation from '@app/navigation';
 import '@app/lang/i18n'; // Initialize i18n
+import { StatusBar } from 'react-native';
 
 /**
  * Main application component that serves as the entry point for the app.
@@ -23,7 +24,8 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <ThemeProvider>
-          <SafeAreaProvider>
+          <SafeAreaProvider style={{ flex: 1 }}>
+            <StatusBar />
             <Navigation />
             <Toast />
           </SafeAreaProvider>

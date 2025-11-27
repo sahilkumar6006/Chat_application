@@ -37,6 +37,8 @@ export const ChatDetailScreen = () => {
     const [sending, setSending] = useState(false);
     const [messageText, setMessageText] = useState('');
     const [currentUserId, setCurrentUserId] = useState<string>('');
+    const [isTyping, setIsTyping] = useState(false);
+    const typingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [socketConnected, setSocketConnected] = useState(false);
     const flatListRef = useRef<FlatList>(null);
 
@@ -46,7 +48,8 @@ export const ChatDetailScreen = () => {
 
         return () => {
             socketService.off('message received');
-            // Optional: leave chat room if backend supports it
+            socketService.off('typing');
+            socketService.off('stop typing');
         };
     }, []);
 
@@ -59,6 +62,14 @@ export const ChatDetailScreen = () => {
             socketService.emit('join chat', chatId);
 
             socketService.on('connected', () => setSocketConnected(true));
+
+            socketService.on('typing', (room: string) => {
+                if (room === chatId) setIsTyping(true);
+            });
+
+            socketService.on('stop typing', (room: string) => {
+                if (room === chatId) setIsTyping(false);
+            });
 
             socketService.on('message received', (newMessage: IMessage) => {
                 const messageChatId = typeof newMessage.chat === 'object' ? newMessage.chat._id : newMessage.chat;
@@ -73,10 +84,28 @@ export const ChatDetailScreen = () => {
         }
     };
 
+    const handleTyping = (text: string) => {
+        setMessageText(text);
+
+        if (!socketConnected) return;
+
+        if (!isTyping) {
+            socketService.emit('typing', chatId);
+        }
+
+        if (typingTimeoutRef.current) {
+            clearTimeout(typingTimeoutRef.current);
+        }
+
+        typingTimeoutRef.current = setTimeout(() => {
+            socketService.emit('stop typing', chatId);
+        }, 3000);
+    };
+
     const loadMessages = async () => {
         try {
             const messageData = await ChatService.fetchMessages(chatId);
-            setMessages(messageData.reverse()); // Reverse to show latest at bottom
+            setMessages(messageData.reverse());
         } catch (error) {
             console.error('Error loading messages:', error);
         } finally {
@@ -130,8 +159,9 @@ export const ChatDetailScreen = () => {
             alignItems: 'center',
         },
         messagesList: {
-            flex: 1,
+            flexGrow: 1,
             paddingVertical: moderateScale(8),
+            paddingBottom: moderateScale(20),
         },
         emptyContainer: {
             flex: 1,
@@ -174,6 +204,16 @@ export const ChatDetailScreen = () => {
             fontSize: moderateScale(18),
             fontWeight: '600',
         },
+        typingIndicator: {
+            paddingHorizontal: moderateScale(16),
+            paddingVertical: moderateScale(4),
+            marginBottom: moderateScale(4),
+        },
+        typingText: {
+            fontSize: moderateScale(12),
+            color: colors.textSecondary,
+            fontStyle: 'italic',
+        },
     });
 
     if (loading) {
@@ -195,34 +235,40 @@ export const ChatDetailScreen = () => {
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
                 keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
             >
-                {messages.length === 0 ? (
-                    <View style={styles.emptyContainer}>
-                        <TextComp
-                            text="No messages yet. Start the conversation!"
-                            style={{ fontSize: moderateScale(16), color: colors.textSecondary }}
-                        />
-                    </View>
-                ) : (
-                    <FlatList
-                        ref={flatListRef}
-                        data={messages}
-                        keyExtractor={(item) => item._id}
-                        renderItem={({ item }) => {
-                            // Safety check for sender object
-                            const isOwnMessage = item.sender && typeof item.sender === 'object'
-                                ? item.sender._id === currentUserId
-                                : false;
+                <FlatList
+                    ref={flatListRef}
+                    style={{ flex: 1 }}
+                    data={messages}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item }) => {
+                        // Safety check for sender object
+                        const isOwnMessage = item.sender && typeof item.sender === 'object'
+                            ? item.sender._id === currentUserId
+                            : false;
 
-                            return (
-                                <MessageBubble
-                                    message={item}
-                                    isOwnMessage={isOwnMessage}
-                                />
-                            );
-                        }}
-                        contentContainerStyle={styles.messagesList}
-                        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: false })}
-                    />
+                        return (
+                            <MessageBubble
+                                message={item}
+                                isOwnMessage={isOwnMessage}
+                            />
+                        );
+                    }}
+                    contentContainerStyle={styles.messagesList}
+                    onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: false })}
+                    ListEmptyComponent={
+                        <View style={styles.emptyContainer}>
+                            <TextComp
+                                text="No messages yet. Start the conversation!"
+                                style={{ fontSize: moderateScale(16), color: colors.textSecondary }}
+                            />
+                        </View>
+                    }
+                />
+
+                {isTyping && (
+                    <View style={styles.typingIndicator}>
+                        <TextComp text="Typing..." style={styles.typingText} />
+                    </View>
                 )}
 
                 <View style={styles.inputContainer}>
@@ -231,7 +277,7 @@ export const ChatDetailScreen = () => {
                         placeholder="Type a message..."
                         placeholderTextColor={colors.textSecondary}
                         value={messageText}
-                        onChangeText={setMessageText}
+                        onChangeText={handleTyping}
                         multiline
                         maxLength={1000}
                     />
