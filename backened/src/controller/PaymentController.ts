@@ -36,3 +36,25 @@ export const createPaymentIntent = async (req: Request, res: Response) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const handlePaymentSuccess = async (req: Request, res: Response) => {
+    try {
+        const { fcmToken, bookingId } = req.body;
+
+        if (!fcmToken || !bookingId) {
+            return res.status(400).json({ error: 'Missing fcmToken or bookingId' });
+        }
+
+        const { sendNotification } = require('../services/notificationService');
+        await sendNotification(fcmToken, {
+            title: 'Payment Successful!',
+            body: `Your booking #${bookingId} has been confirmed.`,
+            data: { type: 'booking_details', bookingId },
+        });
+
+        res.json({ success: true, message: 'Notification sent' });
+    } catch (error: any) {
+        console.error('Error handling payment success:', error);
+        res.status(500).json({ error: error.message });
+    }
+};
