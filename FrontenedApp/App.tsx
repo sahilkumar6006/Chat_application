@@ -6,7 +6,9 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Provider } from 'react-redux';
-import { store } from '@app/redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
+import Toast from 'react-native-toast-message';
+import { store, persistor } from '@app/redux/store';
 import { ThemeProvider } from '@app/context/ThemeContext';
 import Navigation from '@app/navigation';
 import '@app/lang/i18n'; // Initialize i18n
@@ -19,11 +21,14 @@ import '@app/lang/i18n'; // Initialize i18n
 const App = () => {
   return (
     <Provider store={store}>
-      <ThemeProvider>
-        <SafeAreaProvider>
-          <Navigation />
-        </SafeAreaProvider>
-      </ThemeProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <ThemeProvider>
+          <SafeAreaProvider>
+            <Navigation />
+            <Toast />
+          </SafeAreaProvider>
+        </ThemeProvider>
+      </PersistGate>
     </Provider>
   );
 };

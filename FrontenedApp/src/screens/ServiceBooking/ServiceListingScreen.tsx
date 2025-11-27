@@ -10,8 +10,10 @@ import { useTheme } from '@app/context/ThemeContext';
 import Routes from '@app/navigation/Routes';
 import TextComp from '@app/components/TextComp';
 import { TouchableOpacity } from 'react-native';
-import { useAppDispatch, useAppSelector } from '@app/redux/hooks';
-import { addToCart, removeFromCart } from '@app/redux/slices/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@app/redux/store';
+import { addToCart, removeFromCart } from '@app/modules/cart';
+import { selectCartItems } from '@app/modules/cart';
 import { bookingService, Service } from '@app/services/bookingService';
 
 if (Platform.OS === 'android') {
@@ -24,8 +26,8 @@ const ServiceListingScreen = () => {
     const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList>>();
     const { theme } = useTheme();
     const colors = Colors[theme];
-    const dispatch = useAppDispatch();
-    const cartItems = useAppSelector((state) => state.cart.items);
+    const dispatch = useDispatch<AppDispatch>();
+    const cartItems = useSelector(selectCartItems);
     const [services, setServices] = useState<Service[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -48,8 +50,8 @@ const ServiceListingScreen = () => {
         }
     };
 
-    const getItemQuantity = (id: string) => {
-        return cartItems.find((item) => item.id === id)?.quantity || 0;
+    const getItemQuantity = (id: string): number => {
+        return cartItems.find((item: any) => item.id === id)?.quantity || 0;
     };
 
     const handleIncrement = (item: Service) => {
@@ -65,8 +67,8 @@ const ServiceListingScreen = () => {
         dispatch(removeFromCart(id));
     };
 
-    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+    const totalItems = cartItems.reduce((sum: number, item: any) => sum + item.quantity, 0);
+    const totalPrice = cartItems.reduce((sum: number, item: any) => sum + item.quantity * item.price, 0);
 
     const handleProceed = () => {
         navigation.navigate(Routes.BOOKING_CONFIRMATION);

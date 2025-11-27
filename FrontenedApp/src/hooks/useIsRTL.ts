@@ -1,7 +1,8 @@
-import { I18nManager } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 const useIsRTL = () => {
-    return I18nManager.isRTL;
+    const { i18n } = useTranslation();
+    return i18n.language === 'ar';
 };
 
 export default useIsRTL;

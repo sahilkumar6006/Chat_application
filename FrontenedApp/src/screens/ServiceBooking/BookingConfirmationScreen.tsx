@@ -15,22 +15,24 @@ import BookingSummaryCard from '@app/components/BookingSummaryCard';
 import { Colors } from '@app/styles/colors';
 import { useTheme } from '@app/context/ThemeContext';
 import TextComp from '@app/components/TextComp';
-import { useAppSelector, useAppDispatch } from '@app/redux/hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch } from '@app/redux/store';
+import { selectCartItems } from '@app/modules/cart';
 import { bookingService } from '@app/services/bookingService';
-import { clearCart } from '@app/redux/slices/cartSlice';
+import { clearCart } from '@app/modules/cart';
 import Routes from '@app/navigation/Routes';
 
 const BookingConfirmationScreen = () => {
   const navigation = useNavigation();
   const { theme } = useTheme();
   const colors = Colors[theme];
-  const dispatch = useAppDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const [isUrgent, setIsUrgent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const cartItems = useAppSelector(state => state.cart.items);
+  const cartItems = useSelector(selectCartItems);
 
   const serviceTotal = cartItems.reduce(
-    (sum, item) => sum + item.quantity * item.price,
+    (sum: number, item: any) => sum + item.quantity * item.price,
     0,
   );
   const urgentCharge = isUrgent ? 50 : 0;
@@ -113,7 +115,7 @@ const BookingConfirmationScreen = () => {
         {/* Selected Services Card */}
         <View style={[styles.card, { backgroundColor: colors.surface }]}>
           <TextComp text="Selected Services" style={styles.sectionTitle} />
-          {cartItems.map(item => (
+          {cartItems.map((item: any) => (
             <View key={item.id} style={styles.serviceRow}>
               <View style={{ flex: 1 }}>
                 <TextComp text={item.title} style={styles.serviceName} />
