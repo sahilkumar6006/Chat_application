@@ -12,11 +12,13 @@ import SplashScreen from '@app/screens/Splash/SplashScreen';
 import ChatDetailScreen from '@app/screens/Chat/ChatDetailScreen';
 import UserListScreen from '@app/screens/Chat/UserListScreen';
 import ReelsScreen from '@app/screens/Reels/ReelsScreen';
+import OnBoard from '@app/screens/OnBoard/OnBoard';
 import Routes from './Routes';
 import { AuthStackParamList } from './types';
 import { Colors } from '@app/styles/colors';
 import { useTheme } from '@app/context/ThemeContext';
 import { Chat } from '@app/screens/Chat/Chat';
+import { useRTLStyles } from '@app/hooks';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 const Tab = createBottomTabNavigator();
@@ -24,6 +26,20 @@ const Tab = createBottomTabNavigator();
 const MainTabs = () => {
     const { theme } = useTheme();
 
+    const styles = useRTLStyles((isRTL, theme, themeType) => ({
+        tabBarStyle: {
+            backgroundColor: Colors[theme].surface,
+            borderTopColor: Colors[theme].textSecondary,
+            borderTopWidth: 0.5,
+        },
+        tabBarIconStyle: {
+            transform: [
+                {
+                    rotate: isRTL ? '90deg' : '90deg',
+                },
+            ],
+        },
+    }))
     return (
         <Tab.Navigator
             screenOptions={{
@@ -42,6 +58,7 @@ const MainTabs = () => {
                 component={ServiceHomeScreen}
                 options={{
                     tabBarLabel: 'Home',
+                    tabBarIconStyle: styles.tabBarIconStyle,
                     tabBarIcon: ({ color }) => <></>,
                 }}
             />
@@ -51,6 +68,7 @@ const MainTabs = () => {
                 component={Chat}
                 options={{
                     tabBarLabel: 'Chat',
+                    tabBarIconStyle: styles.tabBarIconStyle,
                     tabBarIcon: ({ color }) => <></>,
                 }}
             />
@@ -59,6 +77,7 @@ const MainTabs = () => {
                 component={ReelsScreen}
                 options={{
                     tabBarLabel: 'Reels',
+                    tabBarIconStyle: styles.tabBarIconStyle,
                     tabBarIcon: ({ color }) => <></>,
                 }}
             />
@@ -67,12 +86,14 @@ const MainTabs = () => {
                 component={Profile}
                 options={{
                     tabBarLabel: 'Profile',
+                    tabBarIconStyle: styles.tabBarIconStyle,
                     tabBarIcon: ({ color }) => <></>,
                 }}
             />
         </Tab.Navigator>
     );
 };
+
 
 const Navigation = () => {
     return (
@@ -82,6 +103,7 @@ const Navigation = () => {
                 initialRouteName={Routes.SPLASH as keyof AuthStackParamList}
             >
                 <Stack.Screen name={Routes.SPLASH as keyof AuthStackParamList} component={SplashScreen} />
+                <Stack.Screen name={Routes.ONBOARD as keyof AuthStackParamList} component={OnBoard} />
                 <Stack.Screen name={Routes.LOGIN as keyof AuthStackParamList} component={Login} />
                 <Stack.Screen name={Routes.REGISTER as keyof AuthStackParamList} component={Register} />
                 <Stack.Screen name={Routes.MAIN_TABS as keyof AuthStackParamList} component={MainTabs} />
@@ -93,5 +115,7 @@ const Navigation = () => {
         </NavigationContainer>
     );
 };
+
+
 
 export default Navigation;

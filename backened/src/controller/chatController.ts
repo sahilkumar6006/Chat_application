@@ -2,7 +2,7 @@ import User from "../models/userModel";
 import Chat from "../models/chatModel";
 import { Request, Response } from "express";
 
-const accessChat = async(req: Request, res: Response) => {
+const accessChat = async (req: Request, res: Response) => {
     try {
         const { userId } = req.body;
         console.log('Access chat request body:', req.body);
@@ -17,8 +17,8 @@ const accessChat = async(req: Request, res: Response) => {
                 { users: { $elemMatch: { $eq: userId } } },
             ]
         })
-        .populate("users", "-password")
-        .populate("latestMessage");
+            .populate("users", "-password")
+            .populate("latestMessage");
 
         console.log('Existing chat found:', isChat);
         const fullChat = await User.populate(isChat, {
@@ -59,10 +59,10 @@ const fetchChats = async (req: Request, res: Response) => {
         const results = await Chat.find({
             users: { $elemMatch: { $eq: req.user._id } }
         })
-        .populate("users", "-password")
-        .populate("groupAdmin", "-password")
-        .populate("latestMessage")
-        .sort({ updatedAt: -1 });
+            .populate("users", "-password")
+            .populate("groupAdmin", "-password")
+            .populate("latestMessage")
+            .sort({ updatedAt: -1 });
 
         const populatedResults = await User.populate(results, {
             path: "latestMessage.sender",
@@ -76,21 +76,21 @@ const fetchChats = async (req: Request, res: Response) => {
     }
 }
 
-const createGroupChat = async( req: Request, res: Response) => {
+const createGroupChat = async (req: Request, res: Response) => {
     try {
         console.log(req.body);
         if (!req.body.users || !req.body.name) {
             return res.status(400).send({ message: "Please Fill all the feilds" });
-          }
-          const users = req.body.users;
+        }
+        const users = req.body.users;
 
-          if (users.length < 2) {
+        if (users.length < 2) {
             return res
-              .status(400)
-              .send("More than 2 users are required to form a group chat");
-          }
-          users.push(req.user);
-          try {
+                .status(400)
+                .send("More than 2 users are required to form a group chat");
+        }
+        users.push(req.user);
+        try {
             const groupChat = await Chat.create({
                 chatName: req.body.name,
                 users,
@@ -101,15 +101,15 @@ const createGroupChat = async( req: Request, res: Response) => {
                 path: "users",
                 select: "-password",
             });
-            
+
             const fullChat = await Chat.populate(chatWithUsers, {
                 path: "groupAdmin",
                 select: "-password",
             });
             res.status(200).json(fullChat);
-          } catch (error) {
+        } catch (error) {
             res.status(400).json(error);
-          }
+        }
     } catch (error) {
         res.status(400).json({ message: "Internal server error" });
     }

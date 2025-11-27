@@ -12,4 +12,5 @@ export default {
     USER_LIST: 'UserList',
     BOOKING_CONFIRMATION: 'BookingConfirmation',
     REELS: 'Reels',
+    ONBOARD: 'OnBoard',
 } as const;

@@ -32,18 +32,18 @@ const SplashScreen = () => {
                     routes: [{ name: Routes.MAIN_TABS as never }],
                 });
             } else {
-                // User is not authenticated, navigate to login
+                // User is not authenticated, navigate to OnBoard
                 navigation.reset({
                     index: 0,
-                    routes: [{ name: Routes.LOGIN as never }],
+                    routes: [{ name: Routes.ONBOARD as never }],
                 });
             }
         } catch (error) {
             console.error('Error checking auth token:', error);
-            // On error, navigate to login
+            // On error, navigate to OnBoard
             navigation.reset({
                 index: 0,
-                routes: [{ name: Routes.LOGIN as never }],
+                routes: [{ name: Routes.ONBOARD as never }],
             });
         } finally {
             setIsChecking(false);
