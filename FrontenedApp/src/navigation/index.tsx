@@ -11,6 +11,7 @@ import Profile from '@app/screens/Profile/Profile';
 import SplashScreen from '@app/screens/Splash/SplashScreen';
 import ChatDetailScreen from '@app/screens/Chat/ChatDetailScreen';
 import UserListScreen from '@app/screens/Chat/UserListScreen';
+import ReelsScreen from '@app/screens/Reels/ReelsScreen';
 import Routes from './Routes';
 import { AuthStackParamList } from './types';
 import { Colors } from '@app/styles/colors';
@@ -50,6 +51,14 @@ const MainTabs = () => {
                 component={Chat}
                 options={{
                     tabBarLabel: 'Chat',
+                    tabBarIcon: ({ color }) => <></>,
+                }}
+            />
+            <Tab.Screen
+                name={Routes.REELS}
+                component={ReelsScreen}
+                options={{
+                    tabBarLabel: 'Reels',
                     tabBarIcon: ({ color }) => <></>,
                 }}
             />

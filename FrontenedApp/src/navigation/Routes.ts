@@ -11,4 +11,5 @@ export default {
     CHAT_DETAIL: 'ChatDetail',
     USER_LIST: 'UserList',
     BOOKING_CONFIRMATION: 'BookingConfirmation',
+    REELS: 'Reels',
 } as const;
