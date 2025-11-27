@@ -8,7 +8,7 @@ interface StripeContainerProps {
 
 const StripeContainer: React.FC<StripeContainerProps> = ({ children }) => {
     // Fallback to hardcoded key if env var is missing (for development reliability)
-    const publishableKey = Config.STRIPE_PUBLISHABLE_KEY || 'pk_test_51SY0KQAp2TsOzIRT5yyPKwNSlhWTKfERT2DtmSqn4IylMkj1eQZPay0Z3vgyU6CusHKI06Ojg2IRP3ssnfjKvkVm005qdCffSz';
+    const publishableKey = Config.STRIPE_PUBLISHABLE_KEY || '';
 
     return (
         <StripeProvider
