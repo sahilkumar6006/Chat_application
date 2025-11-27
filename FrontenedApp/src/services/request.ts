@@ -1,11 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Platform } from 'react-native';
 import { secureStorage } from '@app/utils/secureStorage';
+import Config from 'react-native-config';
 
-import { API_URL } from '@env';
 
 // Base URL configuration
-const BASE_URL = API_URL;
 
 /**
  * Axios instance with interceptors for authentication and error handling
@@ -15,7 +14,7 @@ class RequestService {
 
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: BASE_URL,
+            baseURL: Config.API_BASE_URL || 'http://192.168.0.54:6000/api',
             timeout: 30000,
             headers: {
                 'Content-Type': 'application/json',

@@ -2,10 +2,10 @@ import { CartItem } from '@app/redux/slices/cartSlice';
 import axios from 'axios';
 import { Platform } from 'react-native';
 import { secureStorage } from '@app/utils/secureStorage';
+import Config from 'react-native-config';
 
-import { API_URL } from '@env';
 
-const API_BASE_URL = API_URL;
+const API_BASE_URL = Config.API_BASE_URL || 'http://192.168.0.54:6000/api';
 
 export interface ServiceCategory {
     _id: string;
