@@ -15,11 +15,14 @@ import Routes from '../../navigation/Routes';
 import { authService } from '@app/services/authService';
 import { StyleSheet } from 'react-native';
 import { Colors } from '@app/styles/colors';
+import { useTranslation } from 'react-i18next';
+import { LangKeys } from '@app/constants/langKeys';
 
 const Register = () => {
     const { theme } = useTheme();
     const isRTL = useIsRTL();
     const Navigation = useNavigation<any>();
+    const { t } = useTranslation();
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -29,17 +32,17 @@ const Register = () => {
 
     const handleRegister = async () => {
         if (!name || !email || !password || !confirmPassword) {
-            Alert.alert('Error', 'Please fill in all fields');
+            Alert.alert(t(LangKeys.ERROR), 'Please fill in all fields');
             return;
         }
 
         if (password !== confirmPassword) {
-            Alert.alert('Error', 'Passwords do not match');
+            Alert.alert(t(LangKeys.ERROR), 'Passwords do not match');
             return;
         }
 
         if (password.length < 6) {
-            Alert.alert('Error', 'Password must be at least 6 characters');
+            Alert.alert(t(LangKeys.ERROR), 'Password must be at least 6 characters');
             return;
         }
 
@@ -85,47 +88,47 @@ const Register = () => {
 
     return (
         <WrapperContainer style={styles.container}>
-            <HeaderComp title="CREATE ACCOUNT" showBack={true} />
+            <HeaderComp title={t(LangKeys.CREATE_ACCOUNT)} showBack={true} />
 
             <View style={styles.content}>
-                <TextComp text="Join us today" style={styles.title} />
+                <TextComp text={t(LangKeys.JOIN_US)} style={styles.title} />
 
                 <TextInputComp
-                    label="NAME"
+                    label={t(LangKeys.NAME)}
                     value={name}
                     onChangeText={setName}
                 />
 
                 <TextInputComp
-                    label="EMAIL"
+                    label={t(LangKeys.EMAIL)}
                     value={email}
                     onChangeText={setEmail}
                     keyboardType="email-address"
                 />
 
                 <TextInputComp
-                    label="PASSWORD"
+                    label={t(LangKeys.PASSWORD)}
                     value={password}
                     onChangeText={setPassword}
                     isPassword
                 />
 
                 <TextInputComp
-                    label="CONFIRM PASSWORD"
+                    label={t(LangKeys.CONFIRM_PASSWORD)}
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                     isPassword
                 />
 
                 <ButtonComp
-                    text="CREATE ACCOUNT"
+                    text={t(LangKeys.CREATE_ACCOUNT)}
                     onPress={handleRegister}
                     isLoading={loading}
                     style={{ marginBottom: 16 }}
                 />
 
                 <ButtonComp
-                    text="Already have an account? Login"
+                    text={t(LangKeys.ALREADY_HAVE_ACCOUNT)}
                     onPress={() => Navigation.navigate(Routes.LOGIN)}
                     variant="outline"
                 />

@@ -11,6 +11,7 @@ import {
     Alert,
 } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 import { socketService } from '@app/services/SocketService';
 import { ChatService } from '@app/services/ChatService';
 import { authService } from '@app/services/authService';
@@ -22,6 +23,7 @@ import WrapperContainer from '@app/components/WrapperContainer';
 import HeaderComp from '@app/components/HeaderComp';
 import MessageBubble from '@app/components/MessageBubble';
 import TextComp from '@app/components/TextComp';
+import { LangKeys } from '@app/constants/langKeys';
 
 type ChatDetailRouteProp = RouteProp<{ ChatDetail: { chatId: string } }, 'ChatDetail'>;
 
@@ -31,6 +33,7 @@ export const ChatDetailScreen = () => {
     const { theme } = useTheme();
     const colors = Colors[theme];
     const { chatId } = route.params;
+    const { t } = useTranslation();
 
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [loading, setLoading] = useState(true);
@@ -142,7 +145,7 @@ export const ChatDetailScreen = () => {
             console.error('Error details:', JSON.stringify(error, null, 2));
             setMessageText(tempMessage); // Restore message on error
             // Show error to user
-            Alert.alert('Error', 'Failed to send message. Please try again.');
+            Alert.alert(t(LangKeys.ERROR), t(LangKeys.SEND_ERROR));
         } finally {
             setSending(false);
         }
@@ -219,7 +222,7 @@ export const ChatDetailScreen = () => {
     if (loading) {
         return (
             <WrapperContainer style={styles.container}>
-                <HeaderComp title="Chat" showBack={true} />
+                <HeaderComp title={t(LangKeys.CHAT_TITLE)} showBack={true} />
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color={colors.primary} />
                 </View>
@@ -229,7 +232,7 @@ export const ChatDetailScreen = () => {
 
     return (
         <WrapperContainer style={styles.container}>
-            <HeaderComp title="Chat" showBack={true} />
+            <HeaderComp title={t(LangKeys.CHAT_TITLE)} showBack={true} />
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -258,7 +261,7 @@ export const ChatDetailScreen = () => {
                     ListEmptyComponent={
                         <View style={styles.emptyContainer}>
                             <TextComp
-                                text="No messages yet. Start the conversation!"
+                                text={t(LangKeys.NO_MESSAGES)}
                                 style={{ fontSize: moderateScale(16), color: colors.textSecondary }}
                             />
                         </View>
@@ -267,14 +270,14 @@ export const ChatDetailScreen = () => {
 
                 {isTyping && (
                     <View style={styles.typingIndicator}>
-                        <TextComp text="Typing..." style={styles.typingText} />
+                        <TextComp text={t(LangKeys.TYPING)} style={styles.typingText} />
                     </View>
                 )}
 
                 <View style={styles.inputContainer}>
                     <TextInput
                         style={styles.input}
-                        placeholder="Type a message..."
+                        placeholder={t(LangKeys.TYPE_MESSAGE)}
                         placeholderTextColor={colors.textSecondary}
                         value={messageText}
                         onChangeText={handleTyping}

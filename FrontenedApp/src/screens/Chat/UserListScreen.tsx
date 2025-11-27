@@ -17,14 +17,17 @@ import WrapperContainer from '@app/components/WrapperContainer';
 import HeaderComp from '@app/components/HeaderComp';
 import TextComp from '@app/components/TextComp';
 import Routes from '@app/navigation/Routes';
+import { useTranslation } from 'react-i18next';
+import { LangKeys } from '@app/constants/langKeys';
 
 export const UserListScreen = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const { theme } = useTheme();
     const colors = Colors[theme];
     const [users, setUsers] = useState<IUser[]>([]);
     const [loading, setLoading] = useState(true);
     const [creatingChat, setCreatingChat] = useState<string | null>(null);
+    const { t } = useTranslation();
 
     useEffect(() => {
         loadUsers();
@@ -72,11 +75,11 @@ export const UserListScreen = () => {
                 <View style={styles.userInfo}>
                     <TextComp
                         text={item.name}
-                        style={[styles.userName, { color: colors.text }]}
+                        style={StyleSheet.flatten([styles.userName, { color: colors.text }])}
                     />
                     <TextComp
                         text={item.email}
-                        style={[styles.userEmail, { color: colors.textSecondary }]}
+                        style={StyleSheet.flatten([styles.userEmail, { color: colors.textSecondary }])}
                     />
                 </View>
                 {isCreating && (
@@ -130,7 +133,7 @@ export const UserListScreen = () => {
     if (loading) {
         return (
             <WrapperContainer style={styles.container}>
-                <HeaderComp title="Start New Chat" showBack={true} />
+                <HeaderComp title={t(LangKeys.START_NEW_CHAT)} showBack={true} />
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color={colors.primary} />
                 </View>
@@ -140,11 +143,11 @@ export const UserListScreen = () => {
 
     return (
         <WrapperContainer style={styles.container}>
-            <HeaderComp title="Start New Chat" showBack={true} />
+            <HeaderComp title={t(LangKeys.START_NEW_CHAT)} showBack={true} />
             {users.length === 0 ? (
                 <View style={styles.emptyContainer}>
                     <TextComp
-                        text="No users found"
+                        text={t(LangKeys.NO_USERS_FOUND)}
                         style={{ fontSize: moderateScale(16), color: colors.textSecondary }}
                     />
                 </View>

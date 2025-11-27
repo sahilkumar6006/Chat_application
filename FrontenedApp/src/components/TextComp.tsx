@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TextProps, StyleSheet, TextStyle } from 'react-native';
+import { Text, TextProps, StyleSheet, TextStyle, StyleProp } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@app/context/ThemeContext';
 import { Colors } from '@app/styles/colors';
@@ -10,7 +10,7 @@ interface TextCompProps extends TextProps {
     text: string;
     isDynamic?: boolean;
     values?: Record<string, any>;
-    style?: TextStyle;
+    style?: StyleProp<TextStyle>;
 }
 
 const TextComp: React.FC<TextCompProps> = ({
@@ -33,7 +33,7 @@ const TextComp: React.FC<TextCompProps> = ({
             ]}
             {...props}
         >
-            {isDynamic ? text : t(text, values)}
+            {isDynamic ? text : (t(text, values) as string)}
         </Text>
     );
 };

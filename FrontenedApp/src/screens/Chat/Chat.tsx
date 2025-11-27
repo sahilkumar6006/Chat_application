@@ -18,14 +18,17 @@ import HeaderComp from '@app/components/HeaderComp';
 import TextComp from '@app/components/TextComp';
 import ChatListItem from '@app/components/ChatListItem';
 import Routes from '@app/navigation/Routes';
+import { useTranslation } from 'react-i18next';
+import { LangKeys } from '@app/constants/langKeys';
 
 export const Chat = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<any>();
     const { theme } = useTheme();
     const colors = Colors[theme];
     const [chats, setChats] = useState<IChat[]>([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
+    const { t } = useTranslation();
 
     useEffect(() => {
         loadChats();
@@ -103,7 +106,7 @@ export const Chat = () => {
     if (loading) {
         return (
             <WrapperContainer style={styles.container}>
-                <HeaderComp title="CHATS" showBack={false} />
+                <HeaderComp title={t(LangKeys.CHATS)} showBack={false} />
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color={colors.primary} />
                 </View>
@@ -113,11 +116,11 @@ export const Chat = () => {
 
     return (
         <WrapperContainer style={styles.container}>
-            <HeaderComp title="CHATS" showBack={false} />
+            <HeaderComp title={t(LangKeys.CHATS)} showBack={false} />
             {chats.length === 0 ? (
                 <View style={styles.emptyContainer}>
                     <TextComp
-                        text="No chats yet"
+                        text={t(LangKeys.NO_CHATS)}
                         style={styles.emptyText}
                         isDynamic
                     />

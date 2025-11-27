@@ -15,15 +15,15 @@ import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
 import Routes from '../../navigation/Routes';
 import { authService } from '@app/services/authService';
-// import actions from '@app/redux/actions'; // TODO: Implement actions
-// import { useDispatch } from '@app/redux/hooks';
+import { useTranslation } from 'react-i18next';
+import { LangKeys } from '@app/constants/langKeys';
 
 const Login = () => {
   const { theme, toggleTheme } = useTheme();
   const isRTL = useIsRTL();
   const styles = useRTLStyles(isRTL, theme);
   const Navigation = useNavigation<any>();
-  // const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,7 +31,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password');
+      Alert.alert(t(LangKeys.ERROR), 'Please enter both email and password');
       return;
     }
 
@@ -52,41 +52,41 @@ const Login = () => {
 
   return (
     <WrapperContainer style={styles.container}>
-      <HeaderComp title="LOGIN" showBack={false} />
+      <HeaderComp title={t(LangKeys.LOGIN)} showBack={false} />
 
       <View style={styles.content}>
-        <TextComp text="WELCOME_BACK" style={styles.title} />
+        <TextComp text={t(LangKeys.WELCOME_BACK)} style={styles.title} />
 
         <TextInputComp
-          label="EMAIL"
+          label={t(LangKeys.EMAIL)}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
         />
 
         <TextInputComp
-          label="PASSWORD"
+          label={t(LangKeys.PASSWORD)}
           value={password}
           onChangeText={setPassword}
           isPassword
         />
 
         <ButtonComp
-          text="LOGIN"
+          text={t(LangKeys.LOGIN)}
           onPress={handleLogin}
           isLoading={loading}
           style={{ marginBottom: 16 }}
         />
 
         <ButtonComp
-          text="Don't have an account? Register"
+          text={t(LangKeys.DONT_HAVE_ACCOUNT)}
           onPress={() => Navigation.navigate(Routes.REGISTER)}
           variant="outline"
           style={{ marginBottom: 16 }}
         />
 
         <ButtonComp
-          text="Toggle Theme"
+          text={t(LangKeys.TOGGLE_THEME)}
           onPress={toggleTheme}
           variant="outline"
         />

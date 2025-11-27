@@ -2,7 +2,7 @@
  * Profile screen component to display user information
  */
 import React, { useState, useEffect } from 'react';
-import { View, Image, Alert, TouchableOpacity, Modal } from 'react-native';
+import { View, Image, Alert, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import WrapperContainer from '@app/components/WrapperContainer';
 import HeaderComp from '@app/components/HeaderComp';
@@ -13,9 +13,10 @@ import Routes from '../../navigation/Routes';
 import { authService, User } from '@app/services/authService';
 import { useRTLStyles } from '@app/hooks';
 import { Colors } from '@app/styles';
+import { LangKeys } from '@app/constants/langKeys';
 
 const Profile = () => {
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const Navigation = useNavigation<any>();
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(false);
@@ -49,15 +50,15 @@ const Profile = () => {
 
     const handleLogout = async () => {
         Alert.alert(
-            'Logout',
-            'Are you sure you want to logout?',
+            t(LangKeys.LOGOUT_CONFIRM_TITLE),
+            t(LangKeys.LOGOUT_CONFIRM_MESSAGE),
             [
                 {
-                    text: 'Cancel',
+                    text: t(LangKeys.CANCEL),
                     style: 'cancel',
                 },
                 {
-                    text: 'Logout',
+                    text: t(LangKeys.LOGOUT),
                     style: 'destructive',
                     onPress: async () => {
                         setLoading(true);
@@ -69,7 +70,7 @@ const Profile = () => {
                             });
                         } catch (error) {
                             console.error('Logout error:', error);
-                            Alert.alert('Error', 'Failed to logout');
+                            Alert.alert(t(LangKeys.ERROR), 'Failed to logout');
                         } finally {
                             setLoading(false);
                         }
@@ -93,6 +94,7 @@ const Profile = () => {
         },
         iconWrap: {
             padding: 6,
+            backgroundColor: 'transparent',
         },
         icon: {
             fontSize: 24,
@@ -215,11 +217,11 @@ const Profile = () => {
         },
     }));
 
-    const currentLanguage = i18n.language === 'ar' ? 'العربية' : 'English';
+    const currentLanguage = i18n.language === 'ar' ? t(LangKeys.ARABIC) : t(LangKeys.ENGLISH);
 
     return (
         <WrapperContainer style={styles.container}>
-            <HeaderComp title="PROFILE" showBack={false} />
+            <HeaderComp title={t(LangKeys.PROFILE)} showBack={false} />
 
             <View style={styles.content}>
                 <View style={styles.profileImageContainer}>
@@ -231,12 +233,12 @@ const Profile = () => {
 
                 <View style={styles.infoContainer}>
                     <View style={styles.infoRow}>
-                        <TextComp text="Name" style={styles.label} />
+                        <TextComp text={t(LangKeys.NAME)} style={styles.label} />
                         <TextComp text={user?.name || 'Loading...'} style={styles.value} isDynamic />
                     </View>
 
                     <View style={styles.infoRow}>
-                        <TextComp text="Email" style={styles.label} />
+                        <TextComp text={t(LangKeys.EMAIL)} style={styles.label} />
                         <TextComp text={user?.email || 'Loading...'} style={styles.value} isDynamic />
                     </View>
                 </View>
@@ -247,13 +249,13 @@ const Profile = () => {
                         onPress={() => setShowLanguageModal(true)}
                         activeOpacity={0.7}
                     >
-                        <TextComp text="Language" style={styles.settingLabel} />
+                        <TextComp text={t(LangKeys.LANGUAGE)} style={styles.settingLabel} />
                         <TextComp text={currentLanguage} style={styles.settingValue} isDynamic />
                     </TouchableOpacity>
                 </View>
 
                 <ButtonComp
-                    text="LOGOUT"
+                    text={t(LangKeys.LOGOUT)}
                     onPress={handleLogout}
                     isLoading={loading}
                     variant="outline"
@@ -275,7 +277,7 @@ const Profile = () => {
                 >
                     <TouchableOpacity activeOpacity={1} onPress={(e) => e.stopPropagation()}>
                         <View style={styles.modalCard}>
-                            <TextComp text="Select Language" style={styles.modalTitle} />
+                            <TextComp text={t(LangKeys.SELECT_LANGUAGE)} style={styles.modalTitle} />
 
                             <TouchableOpacity
                                 style={[
@@ -285,11 +287,11 @@ const Profile = () => {
                                 onPress={() => handleLanguageChange('en')}
                             >
                                 <TextComp
-                                    text="English"
-                                    style={[
+                                    text={t(LangKeys.ENGLISH)}
+                                    style={StyleSheet.flatten([
                                         styles.modalBtnText,
                                         i18n.language === 'en' && styles.modalBtnTextSelected
-                                    ]}
+                                    ])}
                                     isDynamic
                                 />
                                 {i18n.language === 'en' && (
@@ -305,11 +307,11 @@ const Profile = () => {
                                 onPress={() => handleLanguageChange('ar')}
                             >
                                 <TextComp
-                                    text="العربية"
-                                    style={[
+                                    text={t(LangKeys.ARABIC)}
+                                    style={StyleSheet.flatten([
                                         styles.modalBtnText,
                                         i18n.language === 'ar' && styles.modalBtnTextSelected
-                                    ]}
+                                    ])}
                                     isDynamic
                                 />
                                 {i18n.language === 'ar' && (
