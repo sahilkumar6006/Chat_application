@@ -9,9 +9,11 @@ import {
     KeyboardAvoidingView,
     Platform,
     Alert,
+    Keyboard,
 } from 'react-native';
 import { useRoute, useNavigation, RouteProp } from '@react-navigation/native';
 import { useTranslation } from 'react-i18next';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { socketService } from '@app/services/SocketService';
 import { ChatService } from '@app/services/ChatService';
 import { authService } from '@app/services/authService';
@@ -34,6 +36,7 @@ export const ChatDetailScreen = () => {
     const colors = Colors[theme];
     const { chatId } = route.params;
     const { t } = useTranslation();
+    const insets = useSafeAreaInsets();
 
     const [messages, setMessages] = useState<IMessage[]>([]);
     const [loading, setLoading] = useState(true);
@@ -49,10 +52,18 @@ export const ChatDetailScreen = () => {
         loadMessages();
         setupSocket();
 
+        const keyboardDidShowListener = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                flatListRef.current?.scrollToEnd({ animated: true });
+            }
+        );
+
         return () => {
             socketService.off('message received');
             socketService.off('typing');
             socketService.off('stop typing');
+            keyboardDidShowListener.remove();
         };
     }, []);
 
@@ -151,6 +162,12 @@ export const ChatDetailScreen = () => {
         }
     };
 
+    const handleInputFocus = () => {
+        setTimeout(() => {
+            flatListRef.current?.scrollToEnd({ animated: true });
+        }, 200);
+    };
+
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -236,7 +253,7 @@ export const ChatDetailScreen = () => {
             <KeyboardAvoidingView
                 style={{ flex: 1 }}
                 behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-                keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+                keyboardVerticalOffset={Platform.OS === 'ios' ? moderateScale(56) + insets.top : 0}
             >
                 <FlatList
                     ref={flatListRef}
@@ -258,6 +275,7 @@ export const ChatDetailScreen = () => {
                     }}
                     contentContainerStyle={styles.messagesList}
                     onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: false })}
+                    onLayout={() => flatListRef.current?.scrollToEnd({ animated: false })}
                     ListEmptyComponent={
                         <View style={styles.emptyContainer}>
                             <TextComp
@@ -281,6 +299,7 @@ export const ChatDetailScreen = () => {
                         placeholderTextColor={colors.textSecondary}
                         value={messageText}
                         onChangeText={handleTyping}
+                        onFocus={handleInputFocus}
                         multiline
                         maxLength={1000}
                     />
