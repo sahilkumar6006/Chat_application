@@ -5,7 +5,7 @@ import { secureStorage } from '@app/utils/secureStorage';
 import Config from 'react-native-config';
 
 
-const API_BASE_URL = Config.API_BASE_URL || 'http://192.168.0.54:6000/api';
+const API_BASE_URL = Config.API_BASE_URL || 'http://192.168.29.51:6000/api';
 
 export interface ServiceCategory {
     _id: string;

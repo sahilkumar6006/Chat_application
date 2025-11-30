@@ -14,7 +14,7 @@ class RequestService {
 
     constructor() {
         this.axiosInstance = axios.create({
-            baseURL: Config.API_BASE_URL || 'http://192.168.0.54:6000/api',
+            baseURL: Config.API_BASE_URL || 'http://192.168.29.51:6000/api',
             timeout: 30000,
             headers: {
                 'Content-Type': 'application/json',

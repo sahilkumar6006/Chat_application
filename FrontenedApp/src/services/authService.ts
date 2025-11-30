@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 import Config from 'react-native-config';
 
 
-const URL = Config.API_BASE_URL || (Platform.OS === 'ios' ? 'http://localhost:6000/api' : 'http://192.168.0.54:6000/api');
+const URL = Config.API_BASE_URL || 'http://192.168.29.51:6000/api';
 
 export const API_BASE_URL = URL;
 
