@@ -14,6 +14,7 @@ import UserListScreen from '@app/screens/Chat/UserListScreen';
 import ReelsScreen from '@app/screens/Reels/ReelsScreen';
 import OnBoard from '@app/screens/OnBoard/OnBoard';
 import PaymentScreen from '@app/screens/Payment/PaymentScreen';
+import MarketScreen from '@app/screens/Market/MarketScreen';
 import Routes from './Routes';
 import { AuthStackParamList } from './types';
 import { Colors } from '@app/styles/colors';
@@ -69,6 +70,15 @@ const MainTabs = () => {
                 component={Chat}
                 options={{
                     tabBarLabel: 'Chat',
+                    tabBarIconStyle: styles.tabBarIconStyle,
+                    tabBarIcon: ({ color }) => <></>,
+                }}
+            />
+            <Tab.Screen
+                name={Routes.MARKET}
+                component={MarketScreen}
+                options={{
+                    tabBarLabel: 'Market',
                     tabBarIconStyle: styles.tabBarIconStyle,
                     tabBarIcon: ({ color }) => <></>,
                 }}

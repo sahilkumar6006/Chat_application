@@ -14,4 +14,5 @@ export default {
     REELS: 'Reels',
     ONBOARD: 'ONBOARD',
     PAYMENT: 'PAYMENT',
+    MARKET: 'Market',
 } as const;
